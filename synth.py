@@ -26,7 +26,7 @@ class oscillator:
 	def add_filter(self, sos):
 		self.filters.append(sos)
 
-	def play_note(self, fs, hold, samplerate):
+	def play_note(self, fs, hold, samplerate=44100):
 		t_tot = hold + self.release
 		size = int(t_tot*samplerate)
 		t = np.linspace(0., t_tot, size)
@@ -57,17 +57,22 @@ class oscillator:
 			wave_func = signal.sawtooth
 		if self.shape == 'square':
 			wave_func = signal.square
+		if self.shape == 'whitenoise':
+			wave_func = lambda t: np.random.normal(0.0, 1.0, size=t.size)
+		if self.shape == 'brownnoise':
+			wave_func = lambda t: np.cumsum(np.random.normal(0.0, 1.0, size=t.size))
 
-		data += self.amp * wave_func(2. * np.pi * fs * t)
+		data += wave_func(2. * np.pi * fs * t)
 		for voice in range(1,self.voices//2 + 1):
-			data += self.amp * wave_func(2. * np.pi * fs * 2**(voice*self.detune) * t)
-			data += self.amp * wave_func(2. * np.pi * fs * 2**(-voice*self.detune) * t)
+			data += wave_func(2. * np.pi * fs * 2**(voice*self.detune) * t)
+			data += wave_func(2. * np.pi * fs * 2**(-voice*self.detune) * t)
 		
 		data *= envelope
 
 		for sos in self.filters:
 			data = signal.sosfilt(sos, data)
 
+		data *= self.amp * np.iinfo(np.int16).max / np.max(np.abs(data))
 		return data
 
 
@@ -92,14 +97,18 @@ class synth:
 		return data
 
 
-
-
-samplerate = 44100
+samplerate=44100
 fs = 261.63
 t_tot = 4.
 s = synth()
+
 osc = oscillator(shape='sawtooth', attack=1.5, decay=0.0, sustain=1.0, release=3., voices=5, detune = 0.01)
 sos = signal.butter(2, fs, 'lowpass', fs=samplerate, output='sos')
+osc.add_filter(sos)
+s.add_oscillator(osc)
+
+osc = oscillator(shape='whitenoise', amp=0.05, attack=1.5, decay=0.0, sustain=1.0, release=3)
+sos = signal.butter(2, 2*2*fs, 'lowpass', fs=samplerate, output='sos')
 osc.add_filter(sos)
 s.add_oscillator(osc)
 
@@ -109,6 +118,25 @@ data += s.play_notes(fs*2**(4/12), t_tot)
 data += s.play_notes(fs*2**(7/12), t_tot)
 
 
-data *= np.iinfo(np.int16).max / np.max(data) /1.1
+data *= np.iinfo(np.int16).max / np.max(np.abs(data))
 wavfile.write("example.wav", samplerate, data.astype(np.int16))
 playsound('example.wav')
+
+sys.exit()
+
+
+samplerate=44100
+fs = 261.63
+t_tot = 0.5
+s = synth()
+
+osc = oscillator(shape='square', attack=0.05, decay=0.2, sustain=0.0, voices=3, detune=0.01)
+sos = signal.butter(2, fs, 'lowpass', fs=samplerate, output='sos')
+osc.add_filter(sos)
+s.add_oscillator(osc)
+
+data = s.play_notes(fs, t_tot)
+data *= np.iinfo(np.int16).max / np.max(np.abs(data))
+wavfile.write("example.wav", samplerate, data.astype(np.int16))
+playsound('example.wav')
+
