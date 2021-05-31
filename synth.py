@@ -22,9 +22,13 @@ class oscillator:
 		self.detune = detune
 
 		self.filters = []
+		self.reverb = []
 
 	def add_filter(self, sos):
 		self.filters.append(sos)
+
+	def add_reverb(self, impulse_response):
+		self.reverb.append(impulse_response)
 
 	def play_note(self, fs, hold, samplerate=44100):
 		t_tot = hold + self.release
@@ -72,6 +76,9 @@ class oscillator:
 		for sos in self.filters:
 			data = signal.sosfilt(sos, data)
 
+		for impulse_response in self.reverb:
+			data = signal.convolve(data, impulse_response, mode='same')#[:data.shape[0]]
+
 		data *= self.amp * np.iinfo(np.int16).max / np.max(np.abs(data))
 		return data
 
@@ -97,6 +104,7 @@ class synth:
 		return data
 
 
+
 samplerate=44100
 fs = 261.63
 t_tot = 4.
@@ -105,9 +113,15 @@ s = synth()
 osc = oscillator(shape='sawtooth', attack=1.5, decay=0.0, sustain=1.0, release=3., voices=5, detune = 0.01)
 sos = signal.butter(2, fs, 'lowpass', fs=samplerate, output='sos')
 osc.add_filter(sos)
+#impulse_response = np.exp(-np.linspace(0., 20., 1*samplerate))
+#osc.add_reverb(impulse_response)
+#impulse_response = np.zeros(4*samplerate)
+#impulse_response[::int(samplerate/4)] = 1
+#impulse_response *= np.exp(-np.linspace(0.,10.,impulse_response.size))
+#osc.add_reverb(impulse_response)
 s.add_oscillator(osc)
 
-osc = oscillator(shape='whitenoise', amp=0.05, attack=1.5, decay=0.0, sustain=1.0, release=3)
+osc = oscillator(shape='whitenoise', amp=0.03, attack=1.5, decay=0.0, sustain=1.0, release=3)
 sos = signal.butter(2, 2*2*fs, 'lowpass', fs=samplerate, output='sos')
 osc.add_filter(sos)
 s.add_oscillator(osc)
@@ -127,12 +141,16 @@ sys.exit()
 
 samplerate=44100
 fs = 261.63
-t_tot = 0.5
+t_tot = 2.0
 s = synth()
 
-osc = oscillator(shape='square', attack=0.05, decay=0.2, sustain=0.0, voices=3, detune=0.01)
+osc = oscillator(shape='swtooth', attack=0.05, decay=0.3, sustain=0.0, voices=3, detune=0.01)
 sos = signal.butter(2, fs, 'lowpass', fs=samplerate, output='sos')
 osc.add_filter(sos)
+impulse_response = np.zeros(samplerate)
+impulse_response[::int(1*samplerate/8)] = 1
+impulse_response *= np.exp(-np.linspace(0.,10.,impulse_response.size))
+osc.add_reverb(impulse_response)
 s.add_oscillator(osc)
 
 data = s.play_notes(fs, t_tot)
