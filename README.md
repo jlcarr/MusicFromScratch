@@ -7,6 +7,7 @@ A simple music synthesizer created from scratch using SciPy and Numpy.
 - Going up 1 octave is a doubling in frequency: the whole scale is logarithmic
 - There are 12 notes per octave (including semitones)
 - Therefore any other note's frequency in Hz can be calculated: `440*2**((X-A)/12)`
+- This equal spacing is known as "Twelve-tone equal temperament". Other ways to divide the scale exist.
 
 ### Synth Building Blocks
 #### Oscillators
@@ -49,6 +50,8 @@ Related concepts are echo and delay.
 ### Sound Design / Synth
 - https://en.wikipedia.org/wiki/A440_(pitch_standard)
 - https://en.wikipedia.org/wiki/Scientific_pitch_notation
+- https://en.wikipedia.org/wiki/12_equal_temperament
+- https://en.wikipedia.org/wiki/Equal_temperament
 #### Oscillators
 - https://en.wikipedia.org/wiki/Sawtooth_wave
 #### Envelopes
