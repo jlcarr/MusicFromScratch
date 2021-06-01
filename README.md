@@ -48,6 +48,7 @@ Related concepts are echo and delay.
 
 ### Sound Design / Synth
 - https://en.wikipedia.org/wiki/A440_(pitch_standard)
+- https://en.wikipedia.org/wiki/Scientific_pitch_notation
 #### Oscillators
 - https://en.wikipedia.org/wiki/Sawtooth_wave
 #### Envelopes

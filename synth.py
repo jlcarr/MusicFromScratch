@@ -112,7 +112,6 @@ class synth:
 	def play_notes(self, fs, hold = 1.):
 		t_tot = hold + max([osc.note_envelope.release for osc in self.oscillators])
 		size = int(t_tot*self.samplerate)
-		t = np.linspace(0.0, t_tot, size)
 		data = np.zeros(size)
 		
 		for osc in self.oscillators:
@@ -120,14 +119,28 @@ class synth:
 
 		return data
 
+	def play_song(self, music):
+		release = max([osc.note_envelope.release for osc in self.oscillators])
+		final_release = max([note['time']+note['hold'] for note in music])
+		t_tot = final_release + release
+		size = int(t_tot*self.samplerate)
+		data = np.zeros(size)
 
+		for note in music:
+			start = int(samplerate * note['time'])
+			pitch = 440*2**((note['pitch'] - 69)/12)
+			note_data = self.play_notes(pitch, hold = note['hold'])
+			note_size = note_data.size
+			data[start:start+note_size] += note_data
+
+		return data
 
 samplerate=44100
 fs = 261.63
 t_tot = 4.
 s = synth()
 
-note_envelope = envelope(attack=1.5, decay=0.0, sustain=1.0, release=3.)
+note_envelope = envelope(attack=2., decay=0.0, sustain=1.0, release=3.)
 osc = oscillator(shape='sawtooth', note_envelope=note_envelope, voices=5, detune = 0.01)
 sos = signal.butter(2, fs, 'lowpass', fs=samplerate, output='sos')
 osc.add_filter(sos)
@@ -146,16 +159,21 @@ osc.add_filter(sos)
 s.add_oscillator(osc)
 
 
-data = s.play_notes(fs, t_tot)
-data += s.play_notes(fs*2**(4/12), t_tot)
-data += s.play_notes(fs*2**(7/12), t_tot)
+data = s.play_song([
+	{'pitch':60, 'time':0.0, 'hold':t_tot},
+	{'pitch':64, 'time':0.0, 'hold':t_tot},
+	{'pitch':67, 'time':0.0, 'hold':t_tot},
 
+	{'pitch':72, 'time':t_tot, 'hold':t_tot},
+	{'pitch':64, 'time':t_tot, 'hold':t_tot},
+	{'pitch':67, 'time':t_tot, 'hold':t_tot},
+])
 
 data *= np.iinfo(np.int16).max / np.max(np.abs(data))
 wavfile.write("example.wav", samplerate, data.astype(np.int16))
-playsound('example.wav')
+#playsound('example.wav')
 
-sys.exit()
+#sys.exit()
 
 
 samplerate=44100
@@ -173,9 +191,9 @@ impulse_response *= np.exp(-np.linspace(0.,10.,impulse_response.size))
 osc.add_reverb(impulse_response)
 s.add_oscillator(osc)
 
-data = s.play_notes(fs, t_tot)
-data *= np.iinfo(np.int16).max / np.max(np.abs(data))
-wavfile.write("example.wav", samplerate, data.astype(np.int16))
+#data = s.play_notes(fs, t_tot)
+#data *= np.iinfo(np.int16).max / np.max(np.abs(data))
+#wavfile.write("example.wav", samplerate, data.astype(np.int16))
 #playsound('example.wav')
 
 #sys.exit()
@@ -186,12 +204,24 @@ fs = 261.63
 t_tot = 2.0
 s = synth()
 
-note_envelope = envelope(attack=0.0, decay=1.5, sustain=0.0, decay_func=lambda x: np.exp(-8*x))
+note_envelope = envelope(attack=0.01, decay=1.5, sustain=0.0, decay_func=lambda x: np.exp(-8*x))
 #note_envelope = envelope(attack=0, decay=0, sustain=1.0, release=0)
 osc = oscillator(shape='sine', note_envelope=note_envelope)
+impulse_response = np.zeros(2*samplerate)
+impulse_response[::int(1*samplerate/4)] = 1
+impulse_response *= np.exp(-np.linspace(0.,10.,impulse_response.size))
+#osc.add_reverb(impulse_response)
 s.add_oscillator(osc)
 
-data = s.play_notes(fs, t_tot)
+music = []
+for bar in range(8):
+	music += [
+		{'pitch':72, 'time':t_tot*(bar/2+1/8), 'hold':t_tot},
+		{'pitch':76, 'time':t_tot*(bar/2+2/8), 'hold':t_tot},
+		{'pitch':79, 'time':t_tot*(bar/2+3/8), 'hold':t_tot},
+	]
+lead_data = s.play_song(music)
+data[:lead_data.size] += lead_data
 
 data *= np.iinfo(np.int16).max / np.max(np.abs(data))
 wavfile.write("example.wav", samplerate, data.astype(np.int16))
