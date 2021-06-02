@@ -95,8 +95,9 @@ class oscillator:
 
 
 class synth:
-	def __init__(self, samplerate=44100):
+	def __init__(self, bpm=60, samplerate=44100):
 		self.samplerate = samplerate
+		self.bpm = bpm
 		self.oscillators = []
 
 	def add_oscillator(self, osc):
@@ -116,14 +117,17 @@ class synth:
 	def play_song(self, music):
 		release = max([osc.note_envelope.release for osc in self.oscillators])
 		final_release = max([note['time']+note['hold'] for note in music])
+		final_release *= 60 / self.bpm
 		t_tot = final_release + release
 		size = int(t_tot*self.samplerate)
 		data = np.zeros(size)
 
 		for note in music:
-			start = int(self.samplerate * note['time'])
+			note_time = note['time'] * 60 / self.bpm
+			start = int(self.samplerate * note_time)
+			note_hold = note['hold'] * 60 / self.bpm
 			pitch = 440*2**((note['pitch'] - 69)/12)
-			note_data = self.play_notes(pitch, hold = note['hold'])
+			note_data = self.play_notes(pitch, hold=note_hold)
 			note_size = note_data.size
 			data[start:start+note_size] += note_data
 
