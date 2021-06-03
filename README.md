@@ -34,8 +34,15 @@ The fundamental waveforms are:
 
 #### Filters
 
-#### Reverb
-Related concepts are echo and delay.
+#### Delay (and convolution)
+Echo and reverb are examples of the audio signal being replayed on top of the original several times, with each replay being later and quieter.
+- Echo: Delay >100ms
+	- Produces an audible delay in the signal.
+- Reverb: Delay <100ms
+	- Fast enought to blend the signals.
+	- Used for recreating sound of playing in different rooms.
+
+These effects can be recreated by performing a convolution with the signal: Imagine a decaying comb of impluses.
 
 ## Resources
 ### Python
@@ -53,13 +60,25 @@ Related concepts are echo and delay.
 - https://en.wikipedia.org/wiki/12_equal_temperament
 - https://en.wikipedia.org/wiki/Equal_temperament
 #### Oscillators
+- https://en.wikipedia.org/wiki/Sine_wave
 - https://en.wikipedia.org/wiki/Sawtooth_wave
+- https://en.wikipedia.org/wiki/Square_wave
+- https://en.wikipedia.org/wiki/Triangle_wave
 #### Envelopes
 - https://en.wikipedia.org/wiki/Envelope_(waves)
 #### Reverb
 - https://en.wikipedia.org/wiki/Reverberation
 - https://en.wikipedia.org/wiki/Convolution_reverb
+- https://en.wikipedia.org/wiki/Delay_(audio_effect)
+- https://en.wikipedia.org/wiki/Echo
 #### Filters
 - https://en.wikipedia.org/wiki/Filter_(signal_processing)
 - https://en.wikipedia.org/wiki/Low-pass_filter
 - https://en.wikipedia.org/wiki/Butterworth_filter
+#### Other Effects
+- https://en.wikipedia.org/wiki/Chorus_effect
+- https://en.wikipedia.org/wiki/Beat_(acoustics)
+- https://en.wikipedia.org/wiki/Flanging
+
+### Algorithmic Composition
+- https://en.wikipedia.org/wiki/Algorithmic_composition
