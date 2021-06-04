@@ -67,18 +67,18 @@ note_envelope = envelope(attack=0.01, decay=1.5, sustain=0.0, decay_func=lambda 
 #note_envelope = envelope(attack=0, decay=0, sustain=1.0, release=0)
 osc = oscillator(shape='sine', note_envelope=note_envelope)
 impulse_response = np.zeros(samplerate)
-impulse_response[::int(1*samplerate/4)] = 1
-#impulse_response *= np.exp(-np.linspace(0,4,impulse_response.size))
+impulse_response[::int(1*samplerate/64)] = 1
+impulse_response *= np.exp(-np.linspace(0,4,impulse_response.size))
 impulse_response *= np.linspace(1,0,impulse_response.size)
-osc.add_reverb(impulse_response)
+#osc.add_reverb(impulse_response)
 s.add_oscillator(osc)
 
 music = []
-music += gen_chord('A4m', time=0, hold=1)
-music += gen_chord('D4m', time=4, hold=1)
-music += gen_chord('G4', time=8, hold=1)
-music += gen_chord('C4', time=12, hold=1)
-music = [{**note, 'time':note['time']+2*(i%3)/4, 'pitch':note['pitch']+12} for i,note in enumerate(music)]
+music += gen_chord('A5m', time=0, hold=1)
+music += gen_chord('D5m', time=4, hold=1)
+music += gen_chord('G5', time=8, hold=1)
+music += gen_chord('C5', time=12, hold=1)
+music = [{**note, 'time':note['time']+2*(i%3)/4}  for i,note in enumerate(music)]
 #music += [{**note, 'time':note['time']+1} for i,note in enumerate(music)]
 music += [{**note, 'time':note['time']+2} for i,note in enumerate(music)]
 music += [{**note, 'time':note['time']+16} for i,note in enumerate(music)]

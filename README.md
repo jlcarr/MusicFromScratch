@@ -31,6 +31,18 @@ The fundamental waveforms are:
 	- Sounds like TV static.
 
 #### Envelopes
+Evelopes shape the amplitude of a wave over time. They make the difference between quick "plucks", and longer "sustained" notes.  
+Envelopes are defined by as an amplitude multiplier over time. Taking on values between 0 and 1.
+
+They are 4 main parameters:
+- Attack (time): the amount of time for the signal to reach it's peak loudest.
+   - Short attacks make more "plucky" and "punchy" sounds.
+   - Long attacks make gradually building up sounds, like pads
+- Decay (time): the amound of time for the signal to go from its peak to sustained level.
+- Sustain (percentage): The fraction of the initial peak volume that the note has when held for longer.
+   - Think of how when you strike a piano key it's immediately loud, but as you hold it it dies down.
+- Release (time): The amount of time it takes the note to die out after it is released.
+
 
 #### Filters
 
