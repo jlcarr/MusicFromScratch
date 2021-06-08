@@ -45,6 +45,15 @@ They are 4 main parameters:
 
 
 #### Filters
+Filters have the effect of reducing certain frequencies in the sound.  
+
+The main classes of filter are:
+- low-pass filter: allows lower frequencies to pass through
+- high-pass filter: allows higher frequencies to pass through
+- band-pass filter: allows an interval of frequencies to pass through
+
+Filters are generally specified to have *pass-band* which are the frequencies unaffected, a *stop-band* in which the frequencies are filterd out. 
+The **cut-off frequency** is the point of transition between the pass-band and stop-band.
 
 #### Delay (and convolution)
 Echo and reverb are examples of the audio signal being replayed on top of the original several times, with each replay being later and quieter.
