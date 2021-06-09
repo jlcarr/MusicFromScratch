@@ -5,11 +5,11 @@ import sys
 from synth import *
 
 
-def gen_chord(name, inversion=0, hold=1, time=0):
+def gen_chord(name, octave=4, inversion=0, hold=1, time=0):
 	root = name[0]
-	octave = int(name[1])
-	mod = '' if len(name) <= 2 else name[3:]
-	root = ((ord(root) - ord('C'))+7) % 7
+	scale = [0,2,4,5,7,9,11] # accumulate major scale [2,2,1,2,2,2,1]
+	root = scale[ord(root) - ord('C')] 
+	mod = name[1:]
 
 	root = 12*(octave+1) + root
 
@@ -26,6 +26,16 @@ def gen_chord(name, inversion=0, hold=1, time=0):
 
 	return [{'pitch':root+note, 'time':time, 'hold':hold} for note in chord]
 
+
+def gen_progression(key='C', degree='I', octave=4, time=0, hold=1, arpeggio=False):
+	scale = [0,2,4,5,7,9,11] # accumulate major scale [2,2,1,2,2,2,1]
+	degrees = {'I':0, 'IV': 3, 'V': 4}
+	degree = scale[degrees[degree]]
+	name = chr((ord(key) + degree - ord('A')) % 7 + ord('A'))
+	print(name)
+
+#gen_progression()
+#sys.exit()
 
 samplerate=44100
 fs = 261.63
@@ -50,10 +60,10 @@ osc.add_filter(sos)
 s.add_oscillator(osc)
 
 music = []
-music += gen_chord('A4m', inversion=2, time=0, hold=4)
-music += gen_chord('D4m', time=4, hold=4)
-music += gen_chord('G4', inversion=1, time=8, hold=4)
-music += gen_chord('C4', time=12, hold=4)
+music += gen_chord('Am', inversion=2, time=0, hold=4)
+music += gen_chord('Dm', time=4, hold=4)
+music += gen_chord('G', inversion=1, time=8, hold=4)
+music += gen_chord('C', time=12, hold=4)
 music += [{**note, 'time':note['time']+16} for i,note in enumerate(music)]
 print(music)
 
@@ -74,10 +84,10 @@ impulse_response *= np.linspace(1,0,impulse_response.size)
 s.add_oscillator(osc)
 
 music = []
-music += gen_chord('A5m', time=0, hold=1)
-music += gen_chord('D5m', time=4, hold=1)
-music += gen_chord('G5', time=8, hold=1)
-music += gen_chord('C5', time=12, hold=1)
+music += gen_chord('Am', octave=5, time=0, hold=1)
+music += gen_chord('Dm', octave=5, time=4, hold=1)
+music += gen_chord('G', octave=5, time=8, hold=1)
+music += gen_chord('C', octave=5, time=12, hold=1)
 music = [{**note, 'time':note['time']+2*(i%3)/4}  for i,note in enumerate(music)]
 #music += [{**note, 'time':note['time']+1} for i,note in enumerate(music)]
 music += [{**note, 'time':note['time']+2} for i,note in enumerate(music)]
