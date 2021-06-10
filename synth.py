@@ -119,7 +119,7 @@ class synth:
 		final_release = max([note['time']+note['hold'] for note in music])
 		final_release *= 60 / self.bpm
 		t_tot = final_release + release
-		size = int(t_tot*self.samplerate)
+		size = int(t_tot*self.samplerate)+1
 		data = np.zeros(size)
 
 		for note in music:
