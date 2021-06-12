@@ -6,7 +6,7 @@ from instruments import *
 from music import *
 
 
-key = 'C'
+key = 'D'
 samplerate=44100
 fs = 261.63
 bpm = 120
@@ -16,7 +16,7 @@ s = synth_pad(bpm=bpm, fs=fs, samplerate=samplerate)
 music = []
 for (bar,(degree,inversion)) in enumerate([('vi',2), ('ii',0), ('V',1), ('I',0)]*2):
 	t = 2*4*bar
-	music += gen_progression(key=key, degree=degree, inversion=inversion, time=t, hold=4)
+	music += gen_progression(key=key, degree=degree, octave=3, inversion=0, time=t, hold=4)
 
 data = s.play_song(music)
 
@@ -27,7 +27,7 @@ s = pluck_lead(bpm=bpm, fs=fs, samplerate=samplerate)
 music = []
 for (bar,(degree,inversion)) in enumerate([('vi',2), ('ii',0), ('V',1), ('I',0)]):
 	t = 2*4*bar
-	music += gen_progression(key=key, degree=degree, octave=5, time=t, hold=1, arpeggio=0.25)
+	music += gen_progression(key=key, degree=degree, octave=5, time=t, hold=2, arpeggio=0.25)
 
 music += [{**note, 'time':note['time']+2} for i,note in enumerate(music)]
 music += [{**note, 'time':note['time']+2*16} for i,note in enumerate(music)]
