@@ -10,25 +10,25 @@ key = 'D'
 samplerate=44100
 fs = 261.63
 bpm = 120
+
+
+# Backing chords pad
 s = synth_pad(bpm=bpm, fs=fs, samplerate=samplerate)
 
-
 music = []
-for (bar,(degree,inversion)) in enumerate([('vi',2), ('ii',0), ('V',1), ('I',0)]*2):
+for bar,degree in enumerate(['vi', 'ii', 'V', 'I']*2):
 	t = 2*4*bar
-	music += gen_progression(key=key, degree=degree, octave=3, inversion=0, time=t, hold=4)
-
+	music += gen_progression(key=key, degree=degree, octave=3, time=t, hold=4)
 data = s.play_song(music)
 
 
-t_tot = 8
+# Lead arpeggio pluck
 s = pluck_lead(bpm=bpm, fs=fs, samplerate=samplerate)
 
 music = []
-for (bar,(degree,inversion)) in enumerate([('vi',2), ('ii',0), ('V',1), ('I',0)]):
+for bar,degree in enumerate(['vi', 'ii', 'V', 'I']):
 	t = 2*4*bar
-	music += gen_progression(key=key, degree=degree, octave=5, time=t, hold=2, arpeggio=0.25)
-
+	music += gen_progression(key=key, degree=degree, octave=5, time=t, hold=2, arpeggio=1/4)
 music += [{**note, 'time':note['time']+2} for i,note in enumerate(music)]
 music += [{**note, 'time':note['time']+2*16} for i,note in enumerate(music)]
 lead_data = s.play_song(music)

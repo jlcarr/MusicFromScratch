@@ -3,11 +3,28 @@ A simple music synthesizer created from scratch using SciPy and Numpy.
 
 ## Design
 ### Basic Math of Musical Notes
+#### Fundamentals of Musical Sound
 - A4 (right above middle C) is defined as 440Hz
 - Going up 1 octave is a doubling in frequency: the whole scale is logarithmic
 - There are 12 notes per octave (including semitones)
 - Therefore any other note's frequency in Hz can be calculated: `440*2**((X-A)/12)`
 - This equal spacing is known as "Twelve-tone equal temperament". Other ways to divide the scale exist.
+
+#### Scales
+- A scale is a set of notes ordered by pitch
+- The scale with all 12 notes in an octave is the chromatic scale.
+- Generally of subset of 7 notes (heptatonic scale) are chosen for a composition
+   - Generally these 7 notes are as a diatonic sclae: they are separated by 5 whole-steps (2 notes) and two half-steps (1 note) 
+   - Notice `5+2 == 7` and `5*2 + 2*1 == 12`
+- Diatonic scales are classified by their starting note (tonic) and the pattern of steps.
+   - For the following "W" and "H" will represent "whole-step" and "half-step" respectively.
+   - Major scale: [W, W, H, W, W, W, H]
+   - Minor scale: [W, H, W, W, H, W, W]
+   - Notice these are the same pattern, just cyclically shifted: in total 7 types of scale can be made
+   - Notice this means same scales can be equivalent: e.g. C Major and A Minor. These are known as "relative keys".
+   - Being equivalent in music but written in a different way is also called "enharmonically equivalent"
+
+#### Chords and Progressions
 
 ### Synth Building Blocks
 #### Oscillators
@@ -100,6 +117,17 @@ These effects can be recreated by performing a convolution with the signal: Imag
 - https://en.wikipedia.org/wiki/Chorus_effect
 - https://en.wikipedia.org/wiki/Beat_(acoustics)
 - https://en.wikipedia.org/wiki/Flanging
+
+### Music Theory
+#### Scales
+- https://en.wikipedia.org/wiki/Scale_(music)
+- https://en.wikipedia.org/wiki/Chromatic_scale
+- https://en.wikipedia.org/wiki/Heptatonic_scale
+- https://en.wikipedia.org/wiki/Diatonic_scale
+- https://en.wikipedia.org/wiki/Tonic_(music)
+- https://en.wikipedia.org/wiki/Key_signature
+- https://en.wikipedia.org/wiki/Degree_(music)
+- https://en.wikipedia.org/wiki/Vi%E2%80%93ii%E2%80%93V%E2%80%93I
 
 ### Algorithmic Composition
 - https://en.wikipedia.org/wiki/Algorithmic_composition
