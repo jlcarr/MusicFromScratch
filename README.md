@@ -25,6 +25,15 @@ A simple music synthesizer created from scratch using SciPy and Numpy.
    - Being equivalent in music but written in a different way is also called "enharmonically equivalent"
 
 #### Chords and Progressions
+- A chord is a group of several notes played together
+- An arpeggio is a chord in which the notes are played sequentially rather than together (ordered going up or down in pitch)
+- A triad is a chord with 3 notes and is the most common
+   - Major triad: 0-4-7
+   - Minor triad: 0-3-7
+   - Diminished triad: 0-3-6
+   - Augmented triad: 0-4-8
+- A chord can be defined by its lowest note, known as the root note
+- The "degree" of a chord is the number of semi-tones up from the tonic of the scale it's being played on
 
 ### Synth Building Blocks
 #### Oscillators
@@ -128,6 +137,13 @@ These effects can be recreated by performing a convolution with the signal: Imag
 - https://en.wikipedia.org/wiki/Key_signature
 - https://en.wikipedia.org/wiki/Degree_(music)
 - https://en.wikipedia.org/wiki/Vi%E2%80%93ii%E2%80%93V%E2%80%93I
+- https://wmich.edu/mus-theo/courses/keys.html
 
 ### Algorithmic Composition
 - https://en.wikipedia.org/wiki/Algorithmic_composition
+
+### TODO
+- Add Midi
+   - https://www.cs.cmu.edu/~music/cmsip/readings/MIDI%20tutorial%20for%20programmers.html
+   - https://mido.readthedocs.io/en/latest/index.html
+
