@@ -54,6 +54,7 @@ def cymbals(samplerate=44100, bpm=60, fs=261.63):
 
 	return s
 
+
 def bass_drum(samplerate=44100, bpm=60, fs=261.63):
 	s = synth(bpm=bpm)
 
@@ -64,6 +65,7 @@ def bass_drum(samplerate=44100, bpm=60, fs=261.63):
 	s.add_oscillator(osc)
 
 	return s
+
 
 if __name__=="__main__":
 	from playsound import playsound

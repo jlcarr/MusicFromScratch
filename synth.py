@@ -3,6 +3,9 @@ from scipy import signal
 
 
 class envelope:
+	"""Creates the envenlope as a numpy vector (for multiplying with a synth sound).
+	takes standard ADSR values, as well as shaping functions
+	"""
 	def __init__(self, attack=0.5, decay=0.25, sustain=0.5, release=1., 
 		attack_func=lambda x: x, decay_func=lambda x: 1.-x, release_func=lambda x: 1.-x):
 		self.attack = attack
@@ -39,9 +42,10 @@ class envelope:
 
 		return envelope
 		
-		
 
 class oscillator:
+	"""Creates an oscillator which can be used by the synth class.
+	"""
 	def __init__(self, amp=1.0, shape='sine', note_envelope=envelope(), voices=1, detune=0.):
 		self.amp = amp
 		self.shape = shape
@@ -95,6 +99,8 @@ class oscillator:
 
 
 class synth:
+	"""The main class which plays the oscillators to created sound.
+	"""
 	def __init__(self, bpm=60, samplerate=44100):
 		self.samplerate = samplerate
 		self.bpm = bpm
