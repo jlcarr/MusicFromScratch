@@ -2,8 +2,7 @@ from playsound import playsound
 from scipy.io import wavfile
 import sys
 
-from synth import *
-from music import *
+from MusicFromScratch import *
 from instruments import *
 
 samplerate=44100

@@ -1,4 +1,4 @@
-from synth import *
+from MusicFromScratch import *
 
 
 def synth_pad(samplerate=44100, bpm=60, fs=261.63):

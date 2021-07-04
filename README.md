@@ -1,5 +1,5 @@
-# SciPySynth
-A simple music synthesizer created from scratch using SciPy and Numpy.
+# MusicFromScratch
+A simple music generation library, including a synthesizer, created from scratch using SciPy and Numpy.
 
 ## Design
 ### Basic Math of Musical Notes
