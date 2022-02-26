@@ -74,3 +74,9 @@ def gen_progression(key='C', degree='I', octave=4, inversion=0, invert_to=None, 
 	print("Chord in progression: ", name)
 	return gen_chord(name, octave=octave, inversion=inversion, invert_to=invert_to, time=time, hold=hold, arpeggio=arpeggio)
 
+def mix_tracks(sources, volumes):
+	max_len = max([s.size for s in sources])
+	output = np.zeros(max_len)
+	for s,v in zip(sources,volumes):
+		output[:s.size] += v * s
+	return output

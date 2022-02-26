@@ -5,6 +5,8 @@ import sys
 from MusicFromScratch import *
 from instruments import *
 
+import numpy as np
+
 samplerate=44100
 fs = 261.63
 
@@ -19,7 +21,6 @@ osc.add_filter(sos)
 s.add_oscillator(osc)
 
 data = s.play_notes(fs, hold=2)
-
 
 data *= np.iinfo(np.int16).max / np.max(np.abs(data))
 wavfile.write("crash.wav", samplerate, data.astype(np.int16))
@@ -36,7 +37,26 @@ music = gen_progression(key=key, degree=degree, octave=5, time=0, hold=4, arpegg
 #music += [{**note, 'time':note['time']+0.5} for i,note in enumerate(music)]
 data = s.play_song(music)
 
-
 data *= 0.8*np.iinfo(np.int16).max / np.max(np.abs(data))
 wavfile.write("goal.wav", samplerate, data.astype(np.int16))
 playsound('goal.wav')
+
+
+# scramble
+s = synth(bpm=120)
+note_envelope = envelope(attack=0.01, decay=0, sustain=1.0, release=0.01)
+osc = oscillator(shape='sine', note_envelope=note_envelope)
+s.add_oscillator(osc)
+octave = 5
+music = []
+for i in range(8*4):
+	music.append({
+		'pitch': 12*(octave+1) + np.random.randint(-12,12),
+		'time': i/4,
+		'hold': 1/4
+	})
+data = s.play_song(music)
+
+data *= 0.8*np.iinfo(np.int16).max / np.max(np.abs(data))
+wavfile.write("computer.wav", samplerate, data.astype(np.int16))
+playsound('computer.wav')

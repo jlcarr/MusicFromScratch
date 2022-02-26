@@ -130,6 +130,7 @@ These effects can be recreated by performing a convolution with the signal: Imag
 - https://en.wikipedia.org/wiki/Chorus_effect
 - https://en.wikipedia.org/wiki/Beat_(acoustics)
 - https://en.wikipedia.org/wiki/Flanging
+- https://computermusicresource.com/Simple.bell.tutorial.html
 
 ### Music Theory
 #### Scales

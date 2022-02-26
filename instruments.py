@@ -43,10 +43,10 @@ def pluck_lead(samplerate=44100, bpm=60, fs=261.63):
 	return s
 
 
-def cymbals(samplerate=44100, bpm=60, fs=261.63):
+def hihat(samplerate=44100, bpm=60, fs=261.63):
 	s = synth(bpm=bpm)
 
-	note_envelope = envelope(attack=0.05, decay=1.5, sustain=0.0, release=0., decay_func=lambda x: np.exp(-24*x))
+	note_envelope = envelope(attack=0.001, decay=1.5, sustain=0.0, release=0., decay_func=lambda x: np.exp(-24*x))
 	osc = oscillator(shape='whitenoise', note_envelope=note_envelope)
 	sos = signal.butter(6, 8*fs, 'highpass', fs=samplerate, output='sos')
 	osc.add_filter(sos)
@@ -58,9 +58,9 @@ def cymbals(samplerate=44100, bpm=60, fs=261.63):
 def bass_drum(samplerate=44100, bpm=60, fs=261.63):
 	s = synth(bpm=bpm)
 
-	note_envelope = envelope(attack=0.05, decay=1.0, sustain=0.0, release=0., decay_func=lambda x: np.exp(-8*x))
+	note_envelope = envelope(attack=0.1, decay=1.0, sustain=0.0, release=0., decay_func=lambda x: np.exp(-8*x))
 	osc = oscillator(shape='whitenoise', note_envelope=note_envelope)
-	sos = signal.butter(4, fs, 'lowpass', fs=samplerate, output='sos')
+	sos = signal.butter(4, 2*fs, 'lowpass', fs=samplerate, output='sos')
 	osc.add_filter(sos)
 	s.add_oscillator(osc)
 
@@ -71,13 +71,22 @@ if __name__=="__main__":
 	from playsound import playsound
 	from scipy.io import wavfile
 	samplerate=44100
-	s = cymbals(bpm=100)
-	data = s.play_song([
-	        {'pitch':0, 'time':0.0, 'hold':1},
-	        {'pitch':0, 'time':1.0, 'hold':1},
-	        {'pitch':0, 'time':2.0, 'hold':1},
-	        {'pitch':0, 'time':3.0, 'hold':1},
+	
+	s = hihat(bpm=100)
+	hihat_data = s.play_song([
+	        {'pitch':0, 'time':0.0, 'hold':4},
+	        {'pitch':0, 'time':1.0, 'hold':4},
+	        {'pitch':0, 'time':2.0, 'hold':4},
+	        {'pitch':0, 'time':3.0, 'hold':4},
 	])
+	
+	s = bass_drum(bpm=100)
+	bass_data = s.play_song([
+	        {'pitch':0, 'time':0.0, 'hold':4},
+	        {'pitch':0, 'time':2.0, 'hold':4},
+	])
+
+	data = mix_tracks([hihat_data, bass_data], [0.7, 0.3])
 
 	data *= np.iinfo(np.int16).max / np.max(np.abs(data))
 	wavfile.write("example.wav", samplerate, data.astype(np.int16))
