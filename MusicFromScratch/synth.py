@@ -73,12 +73,14 @@ class oscillator:
 		wave_func = np.sin
 		if self.shape == 'sawtooth':
 			wave_func = signal.sawtooth
-		if self.shape == 'square':
+		elif self.shape == 'square':
 			wave_func = signal.square
-		if self.shape == 'whitenoise':
+		elif self.shape == 'whitenoise':
 			wave_func = lambda t: np.random.normal(0.0, 1.0, size=t.size)
-		if self.shape == 'brownnoise':
+		elif self.shape == 'brownnoise':
 			wave_func = lambda t: np.cumsum(np.random.normal(0.0, 1.0, size=t.size))
+		elif not isinstance(self.shape, str):
+			wave_func = self.shape
 
 		data += wave_func(2. * np.pi * fs * t)
 		for voice in range(1,self.voices//2 + 1):

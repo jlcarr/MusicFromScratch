@@ -65,6 +65,18 @@ def bass_drum(samplerate=44100, bpm=60, fs=261.63):
 	s.add_oscillator(osc)
 
 	return s
+	
+def kick_drum(samplerate=44100, bpm=60, fs=261.63):
+	s = synth(bpm=bpm)
+
+	note_envelope = envelope(attack=0.1, decay=1.0, sustain=0.0, release=0., decay_func=lambda x: np.exp(-8*x))
+	shape = lambda t: np.sin(t * np.exp(-12*np.linspace(0,1,t.size)))
+	osc = oscillator(shape=shape, note_envelope=note_envelope)
+	#sos = signal.butter(4, 2*fs, 'lowpass', fs=samplerate, output='sos')
+	#osc.add_filter(sos)
+	s.add_oscillator(osc)
+
+	return s
 
 
 if __name__=="__main__":
@@ -87,6 +99,12 @@ if __name__=="__main__":
 	])
 
 	data = mix_tracks([hihat_data, bass_data], [0.7, 0.3])
+	
+	s = kick_drum(bpm=100)
+	data = s.play_song([
+	        {'pitch': 12*5, 'time':0.0, 'hold':4},
+	        {'pitch': 12*5, 'time':2.0, 'hold':4},
+	])
 
 	data *= np.iinfo(np.int16).max / np.max(np.abs(data))
 	wavfile.write("example.wav", samplerate, data.astype(np.int16))
